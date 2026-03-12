@@ -21,8 +21,8 @@ app.use('/api/prompts', promptRoutes)
 
 app.use(errorHandler)
 
-const PORT  = process.env.PORT || 5000
+const PORT  = process.env.PORT || 8080
 
-app.listen(PORT,()=>{
+app.listen(PORT, '0.0.0.0', ()=>{
     console.log(`Server is running on port ${PORT}`)
 })
