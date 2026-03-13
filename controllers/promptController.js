@@ -16,6 +16,7 @@ const createPrompt = async(req , res , next)=>{
             promptText,
             category,
             tags,
+            user: req.user._id
         })
         res.status(201).json({message:"Prompt created successfully" , prompt})  
     }catch (error) {
@@ -75,6 +76,10 @@ const updatePrompt = async(req , res , next)=>{
             return res.status(404).json({message:"Prompt not found"})
         }
 
+        if(prompt.user.toString() !== req.user._id.toString()){
+            return res.status(401).json({message:"Not authorized to update this prompt"})
+        }
+
         prompt.title = req.body.title || prompt.title
         prompt.description = req.body.description || prompt.description
         prompt.promptText = req.body.promptText || prompt.promptText
@@ -94,6 +99,9 @@ const deletePrompt = async(req , res , next)=>{
 
         if(!prompt){
             return res.status(404).json({message:"Prompt not found"})
+        }
+          if(prompt.user.toString() !== req.user._id.toString()){
+            return res.status(401).json({message:"Not authorized to update this prompt"})
         }
 
         await prompt.deleteOne()
